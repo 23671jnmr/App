@@ -1,9 +1,29 @@
 -- database: ./database.db
 
-SELECT * FROM Bikes;
+SELECT * FROM "table-name";
 
-INSERT INTO Bikes(Model,TopSpeed,Cost, Description)
-VALUES("MT.03" ,108,5300,"The 2024 Yamaha MT-03 is a 321cc naked sportbike with a top speed of around 105 mph. It costs about $5,000. It's known for its agile handling and aggressive styling, making it a popular choice for urban riders and beginners.");
+CREATE TABLE Makers (
+    MakerID INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL
+);
+INSERT INTO Makers (MakerID, Name) VALUES
+(0, 'Yamaha'),
+(1, 'Suzuki'),
+(2, 'Kawasaki'),
+(3, 'Honda');
+
+CREATE TABLE Bikes (
+    BikeId INTEGER PRIMARY KEY AUTOINCREMENT,
+    MakerID INTEGER REFERENCES Makers(MakerID),
+    Model TEXT NOT NULL,
+    TopSpeed INTEGER,
+    Cost INTEGER,
+    Description TEXT,
+    ImageURL TEXT
+);
+
+INSERT INTO Bikes (MakerID, Model, TopSpeed, Cost, Description)
+VALUES (0, "MT-03", 108, 5300, "The 2024 Yamaha MT-03 is a 321cc naked sportbike with a top speed of around 105 mph. It costs about $5,000. It's known for its agile handling and aggressive styling, making it a popular choice for urban riders and beginners.");
 
 INSERT INTO Bikes(Model,TopSpeed,Cost,Description)
 VALUES("R3",112,5500,"A beginner friendly supersport with smooth power delivery and agile handling. The R3 blends comfort and sporty performance, making it a popular choice for daily riding and track learning.");
@@ -50,9 +70,30 @@ VALUES("Africa Twin",125,14500,"A capable adventure motorcycle built for long di
 INSERT INTO Bikes(Model,TopSpeed,Cost,Description)
 VALUES("Rebel 500",95,6700,"A lightweight cruiser with relaxed ergonomics and a friendly parallel twin engine. The Rebel 500 is known for its approachable nature, custom ready style, and smooth urban performance.");
 
+SELECT Bikes.BikeId, Makers.Name, Bikes.Model
+FROM Bikes
+JOIN Makers ON Makers.MakerID = Bikes.MakerID;
+
+SELECT *
+FROM Bikes
+JOIN Makers ON Makers.MakerID = Bikes.MakerID
+WHERE Bikes.BikeId = 2;
 
 -- All bikes
-SELECT * FROM Bikes;
-SELECT Makers.Name,Bikes.Model FROM Bikes   
-JOIN Makers ON Makers.MakerID=Bikes.MarkerID
-WHERE Makers.Name="Yamaha";
+SELECT Makers.Name,Bikes.Model 
+FROM Bikes 
+JOIN Makers ON Makers.MakerID=Bikes.MakerID;
+
+
+-- just id, maker model and umageurl
+SELECT Bikes.BikeId,Makers.Name,Bikes.Model,Bikes.ImageURL
+FROM Bikes
+JOIN Makers ON Makers.MakerID=Bikes.MakerID;
+
+--Just one bike based on id 
+SELECT * FROM Bikes 
+JOIN Makers ON Makers.MakerID=Bikes.MakerID
+WHERE Bikes.BikeId = 2;
+
+
+SELECT * FROM Bikes WHERE BikeId = 2;
